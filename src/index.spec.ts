@@ -4,7 +4,7 @@ import PuzzleFactory from './utils/PuzzleFactory';
 
 describe('AoC test runner', () => {
   const dirs = readdirSync('./src/days', { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
+    .filter((dirent) => dirent.isDirectory() && Number.parseInt(dirent.name))
     .map((dirent) => dirent.name);
 
   for (const day of dirs) {

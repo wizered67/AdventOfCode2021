@@ -1,18 +1,12 @@
 import Puzzle from '../../types/AbstractPuzzle';
+import { listNeighbors, parseGrid, Position, PositionSet } from '../utils/grid';
 
 export default class ConcretePuzzle extends Puzzle {
   public solveFirst(): string {
-    const grid = this.parseInput();
+    const grid = parseGrid(this.input);
     return `${findLowPoints(grid)
       .map(({ row, col }) => grid[row][col])
       .reduce((prev, cur) => prev + cur + 1, 0)}`;
-  }
-
-  private parseInput(): number[][] {
-    const inputLines = this.input.split('\n');
-    return inputLines.map((line) =>
-      line.split('').map((num) => Number.parseInt(num))
-    );
   }
 
   public getFirstExpectedResult(): string {
@@ -21,7 +15,7 @@ export default class ConcretePuzzle extends Puzzle {
   }
 
   public solveSecond(): string {
-    const grid = this.parseInput();
+    const grid = parseGrid(this.input);
     const lowPoints = findLowPoints(grid);
     const descendingBasinSizes = lowPoints
       .map((lowPoint) => findBasinSize(grid, lowPoint))
@@ -37,11 +31,6 @@ export default class ConcretePuzzle extends Puzzle {
     // RETURN EXPECTED SOLUTION FOR TEST 2;
     return 'day 1 solution 2';
   }
-}
-
-interface Position {
-  row: number;
-  col: number;
 }
 
 function findBasinSize(grid: number[][], lowPoint: Position) {
@@ -73,19 +62,6 @@ function findBasinSize(grid: number[][], lowPoint: Position) {
   return basinPositions.length;
 }
 
-function getSpaceOrUndefined(grid: number[][], row: number, col: number) {
-  return (grid[row] ?? [])[col];
-}
-
-function listNeighbors(grid: number[][], row: number, col: number): Position[] {
-  return [
-    { row: row - 1, col },
-    { row: row + 1, col },
-    { row, col: col - 1 },
-    { row, col: col + 1 },
-  ].filter(({ row, col }) => getSpaceOrUndefined(grid, row, col) !== undefined);
-}
-
 function findLowPoints(grid: number[][]): Position[] {
   const results = [];
   for (let row = 0; row < grid.length; row++) {
@@ -102,20 +78,4 @@ function findLowPoints(grid: number[][]): Position[] {
   }
 
   return results;
-}
-
-class PositionSet {
-  private set = new Set<`${number}_${number}`>();
-
-  private positionToString(position: Position) {
-    return `${position.row}_${position.col}` as const;
-  }
-
-  has(position: Position) {
-    return this.set.has(this.positionToString(position));
-  }
-
-  add(position: Position) {
-    this.set.add(this.positionToString(position));
-  }
 }
