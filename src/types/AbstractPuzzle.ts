@@ -7,8 +7,8 @@ export default abstract class Puzzle implements PuzzleInterface {
     this.input = input;
   }
 
-  public abstract solveFirst(): string;
-  public abstract getFirstExpectedResult(): string;
-  public abstract solveSecond(): string;
-  public abstract getSecondExpectedResult(): string;
+  public abstract solveFirst(): string | number;
+  public abstract getFirstExpectedResult(): string | number;
+  public abstract solveSecond(): string | number;
+  public abstract getSecondExpectedResult(): string | number;
 }
